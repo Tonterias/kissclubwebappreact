@@ -1,0 +1,29 @@
+name: Deploy to Firebase Hosting - Dummy Webapp
+
+on:
+  push:
+    branches:
+      - develop  # You can change this to main or any other branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build App
+        run: npm run build
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}"
+          channelId: live
+          target: dummy
+          projectId: kissclubdevelopment-c1ea1

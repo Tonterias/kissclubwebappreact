@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "kissclubdevelopment-c1ea1"
-  }
+  },
+  "targets": {
+    "kissclubdevelopment-c1ea1": {
+      "hosting": {
+        "dummy": [
+          "dummy-webapp"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
