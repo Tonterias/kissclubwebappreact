@@ -1,0 +1,16 @@
+
+
+.button-signin:hover{
+    cursor: pointer;
+    opacity:0.4 !important;
+}
+
+.forgot-password-btn:hover{
+    cursor: pointer;
+    opacity:0.4 !important;
+}
+
+
+.text-align{
+    text-align: left;
+}

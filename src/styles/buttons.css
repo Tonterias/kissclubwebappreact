@@ -1,0 +1,24 @@
+.MainButton:hover{
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.swipe-card {
+    width: 300px;
+    height: 400px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    position: absolute;
+    background-color: #fff;
+    cursor: grab;
+    user-select: none;
+}
+
+.swipe-card img {
+    object-fit: cover;
+}
+
+.swipe-card h3 {
+    padding: 10px;
+}
