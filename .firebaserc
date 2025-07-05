@@ -1,12 +1,24 @@
 {
   "projects": {
-    "default": "kissclubdevelopment-c1ea1"
+    "default": "kissclubdevelopment-c1ea1",
+    "dev": "kissclubdevelopment-c1ea1",
+    "prod": "kissclub-174de"
   },
   "targets": {
     "kissclubdevelopment-c1ea1": {
       "hosting": {
-        "dummy": [
-          "dummy-webapp"
+        "devweb": [
+          "kissclubdevelopment-c1ea1"
+        ],
+        "prodweb": [
+          "prodwebappkissclub"
+        ]
+      }
+    },
+    "kissclub-174de": {
+      "hosting": {
+        "prodweb": [
+          "prodwebappkissclub"
         ]
       }
     }
