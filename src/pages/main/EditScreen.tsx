@@ -133,7 +133,7 @@ const EditScreen = () => {
         }
     };
     return (
-        <div style={{height: '100vh', width: '100vw', backgroundColor: "white", color: "black", paddingBottom: "15vh"}}>
+        <div style={{height: '100vh', width: '100vw', backgroundColor: "white", color: "black", padding: "18vh 0px 30vh", overflowY: "scroll"}}>
             <UpperNav label={t('edit_profile')}/>
             {
                 loading ? <div style={{
