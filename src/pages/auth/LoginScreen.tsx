@@ -40,8 +40,10 @@ const LoginScreen = () => {
             width: '100vw',
             display: 'flex',
             alignItems: 'center',
+            paddingBottom: '50px',
             flexDirection: 'column',
-            gap: "1.5rem"
+            gap: "1.5rem",
+            // overflow: 'scroll'
         }}>
             <div style={{position: 'absolute', top: 30, left: 15}} className="forgot-password-btn"
                  onClick={() => navigate('/welcome')}>
@@ -89,7 +91,7 @@ const LoginScreen = () => {
                           className={"forgot-password-btn"} onClick={() => navigate('/signup')}/>
                 </div>
             </div>
-            <div style={{position: "absolute", bottom: "2rem"}}>
+            <div style={{position: "fixed", bottom: "2rem"}}>
                 {loading ? (
                     <Loader loading={loading} color={"red"}/>
                 ) : (
