@@ -1,16 +1,34 @@
 {
   "hosting": [
     {
-      "target": "devweb",
-      "public": "dev",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "site": "kissclubdevelopment-c1ea1"
+      "target": "devweb",    
+      "public": "dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
     },
     {
-      "target": "prodweb",
-      "public": "prod",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "site": "prodwebappkissclub"
+      "target": "prodweb",    
+      "public": "dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
     }
   ]
 }

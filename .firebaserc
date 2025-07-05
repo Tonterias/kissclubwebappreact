@@ -9,9 +9,6 @@
       "hosting": {
         "devweb": [
           "kissclubdevelopment-c1ea1"
-        ],
-        "prodweb": [
-          "prodwebappkissclub"
         ]
       }
     },
