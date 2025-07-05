@@ -1,0 +1,24 @@
+{
+  "projects": {
+    "default": "kissclubdevelopment-c1ea1",
+    "dev": "kissclubdevelopment-c1ea1",
+    "prod": "kissclub-174de"
+  },
+  "targets": {
+    "kissclubdevelopment-c1ea1": {
+      "hosting": {
+        "devweb": [
+          "kissclubdevelopment-c1ea1"
+        ]
+      }
+    },
+    "kissclub-174de": {
+      "hosting": {
+        "prodweb": [
+          "prodwebappkissclub"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
