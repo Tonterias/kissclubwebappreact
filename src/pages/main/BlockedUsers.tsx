@@ -3,8 +3,9 @@ import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {useCallback, useEffect, useState} from "react";
-import {auth, db} from "../../services/firebaseConfig.tsx";
+import {analytics, auth, db} from "../../services/firebaseConfig.tsx";
 import {arrayRemove, doc, getDoc, updateDoc} from "firebase/firestore";
+import {logEvent} from "firebase/analytics";
 
 
 
@@ -69,10 +70,26 @@ const BlockedUsersPage = () => {
         const user = auth.currentUser;
         if (!user) return;
         const userRef = doc(db, 'users', user.uid)
+        const userDoc = await getDoc(userRef);
+        const userData = userDoc.data();
         await updateDoc(userRef, {
             blockedUsers: arrayRemove(userId)
         })
+        if (userData?.partyId) {
+            logEvent(analytics, 'unblocked_user', {
+                party_id: userData.partyId,
+                reported_user_id: userId,
+            });
+        }
+
     }
+
+    useEffect(() => {
+        logEvent(analytics, 'screen_view', {
+            firebase_screen: 'blocked_users_screen',
+            firebase_screen_class: 'BlockedUsersPage',
+        });
+    }, []);
     useEffect(() => {
         GetBlockUser();
     }, [GetBlockUser, unBlockedUsers]);

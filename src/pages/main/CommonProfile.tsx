@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
 import {useEffect, useState} from "react";
-import {db} from "../../services/firebaseConfig.tsx";
+import {analytics, db} from "../../services/firebaseConfig.tsx";
 import {doc, getDoc, onSnapshot} from "firebase/firestore";
 import Male from '../../assets/images/male.png';
 import Female from '../../assets/images/female.png';
@@ -10,6 +10,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import Loader from "../../components/loader.tsx";
 import OptionsDialogue from "../../components/OptionsDialogue.tsx";
 import BlockDialogue from "../../components/BlockDialogue.tsx";
+import {logEvent} from "firebase/analytics";
 
 const CommonProfile = () => {
     const {id} = useParams();
@@ -80,7 +81,12 @@ const CommonProfile = () => {
         }
     };
 
-
+    useEffect(() => {
+        logEvent(analytics, 'screen_view', {
+            firebase_screen: 'user_profile_screen',
+            firebase_screen_class: 'MainScreens',
+        });
+    }, []);
 
     // @ts-ignore
     // @ts-ignore

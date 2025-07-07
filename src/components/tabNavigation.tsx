@@ -9,6 +9,8 @@ import MatchesSelected from '../assets/images/mouth_selected.png'
 import MatchesUnselected from '../assets/images/mouth_unselected.png'
 import ProfileSelected from '../assets/images/user_selected.png'
 import ProfileUnselected from '../assets/images/user_unselected.png'
+import {logEvent} from "firebase/analytics";
+import {analytics} from "../services/firebaseConfig.tsx";
 
 
 const BottomNav = () => {
@@ -56,7 +58,13 @@ const BottomNav = () => {
                             backgroundColor: isActive ? '#e1dede' : "transparent",
                             userSelect: 'none'
                         }}
-                        onClick={() => navigate(item.route)}
+                        onClick={() => {
+                            navigate(item.route)
+                            logEvent(analytics, 'screen_view', {
+                                firebase_screen: item.label,
+                                firebase_screen_class: 'NavigationMenu',
+                            });
+                        }}
                     >
                         {
                             isActive ? <img src={item.selected} alt={"icon"} style={{height:"1.5rem",width:"1.5rem"}}/> :

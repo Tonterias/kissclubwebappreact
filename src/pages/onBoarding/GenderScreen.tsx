@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {auth, db} from "../../services/firebaseConfig.tsx";
+import {analytics, auth, db} from "../../services/firebaseConfig.tsx";
 import {doc, updateDoc} from "firebase/firestore";
 import ProgressBar from "../../components/ProgressBar.tsx";
 import Text from "../../components/customText.tsx";
@@ -11,6 +11,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
 import Loader from "../../components/loader.tsx";
 import {toast} from "react-toastify";
+import {logEvent} from "firebase/analytics";
 
 const GenderScreen = () => {
     const {t} = useTranslation();
@@ -28,6 +29,10 @@ const GenderScreen = () => {
                 await updateDoc(userRef, {
                     gender: selected === 1 ? 'MALE' : selected === 2 ? 'FEMALE' : selected === 3 ? 'OTHER' : null
                 });
+                logEvent(analytics, 'onboarding_progress', {
+                    step_number :5,
+                    step_name:"gender"
+                });
                 navigate('/options')
                 setLoading(false);
             } catch (error) {
@@ -36,6 +41,12 @@ const GenderScreen = () => {
             }
         }
     };
+    useEffect(() => {
+        logEvent(analytics, 'screen_view', {
+            firebase_screen: 'gender_screen',
+            firebase_screen_class: 'Onboarding',
+        });
+    }, []);
     return (
         <div style={{height: '100vh', width: '100vw', display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
             <div style={{position: 'absolute', top: 30, left: 30}} className="forgot-password-btn"

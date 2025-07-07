@@ -1,12 +1,13 @@
 import {useEffect, useState} from "react";
 import {doc, onSnapshot} from "firebase/firestore";
-import {db} from "../../services/firebaseConfig.tsx";
+import {analytics, db} from "../../services/firebaseConfig.tsx";
 import {useTranslation} from "react-i18next";
 import {faClock} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {MainButton} from "../../components/Buttons.tsx";
 import maps from "../../assets/images/maps.png"
 import {useNavigate, useParams} from "react-router-dom";
+import {logEvent} from "firebase/analytics";
 
 
 
@@ -42,6 +43,13 @@ const PartyDetail = () => {
                 if (docSnap.exists()) {
                     // @ts-ignore
                     setDetails(docSnap.data());
+                    const data = docSnap.data();
+                    logEvent(analytics, 'party_selected', {
+                        party_id : id,
+                        party_name :data.localName,
+                        city:data.localCity,
+                        country:data.country
+                    });
                 } else {
                     setDetails(undefined);
                 }
@@ -57,6 +65,12 @@ const PartyDetail = () => {
             setLoading(false);
         }
     };
+    useEffect(() => {
+        logEvent(analytics, 'screen_view', {
+            firebase_screen: 'party_detail_screen',
+            firebase_screen_class: 'PartyScreens',
+        });
+    }, []);
 
     useEffect(() => {
         const unsubscribe = getData();

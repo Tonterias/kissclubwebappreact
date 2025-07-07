@@ -2,8 +2,9 @@ import {useTranslation} from "react-i18next";
 import PartyCard from "../../components/PartyCard.tsx";
 import {useEffect, useState} from "react";
 import {onSnapshot, collection, type DocumentData} from "firebase/firestore";
-import {db} from "../../services/firebaseConfig.tsx";
+import {analytics, db} from "../../services/firebaseConfig.tsx";
 import Loader from "../../components/loader.tsx";
+import {logEvent} from "firebase/analytics";
 
 const PartyList = () => {
     const {t} = useTranslation();
@@ -27,6 +28,12 @@ const PartyList = () => {
         return () => unsubscribe();
     }, []);
 
+    useEffect(() => {
+        logEvent(analytics, 'screen_view', {
+            firebase_screen: 'party_list_screen',
+            firebase_screen_class: 'PartyScreens',
+        });
+    }, []);
     return (
         <div style={{
             width: '100vw',

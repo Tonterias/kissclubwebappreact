@@ -2,15 +2,16 @@ import ProgressBar from "../../components/ProgressBar";
 import Text from "../../components/customText.tsx";
 import {useTranslation} from "react-i18next";
 import {TextInputPhone} from "../../components/TextInputs.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {MainButton} from "../../components/Buttons.tsx";
-import {auth, db} from "../../services/firebaseConfig.tsx";
+import {analytics, auth, db} from "../../services/firebaseConfig.tsx";
 import {doc, updateDoc} from "firebase/firestore";
 import {useNavigate} from "react-router-dom";
 import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {toast} from "react-toastify";
 import Loader from "../../components/loader.tsx";
+import {logEvent} from "firebase/analytics";
 
 const PhoneInputScreen = () => {
     const {t} = useTranslation();
@@ -27,6 +28,10 @@ const PhoneInputScreen = () => {
                     isNewUser: false,
                     number: phone
                 });
+                logEvent(analytics, 'onboarding_progress', {
+                    step_number :2,
+                    step_name:"telephone_number"
+                });
                 navigate('/name')
                 setLoading(false);
             } catch (error) {
@@ -35,6 +40,12 @@ const PhoneInputScreen = () => {
             }
         }
     };
+    useEffect(() => {
+        logEvent(analytics, 'screen_view', {
+            firebase_screen: 'phone_screen',
+            firebase_screen_class: 'Onboarding',
+        });
+    }, []);
     return (
         <div style={{height: '100vh', width: '100vw', display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
             <div style={{position: 'absolute', top: 30, left: 30}} className="forgot-password-btn"

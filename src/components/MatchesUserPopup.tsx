@@ -1,4 +1,7 @@
 import {useTranslation} from "react-i18next";
+import {logEvent} from "firebase/analytics";
+import {analytics} from "../services/firebaseConfig.tsx";
+import {useEffect} from "react";
 
 
 
@@ -14,9 +17,14 @@ type Props = {
 
 
 
-const MatchesUserPopup = ({profileOne,profileTwo,onClick}:Props) => {
+const MatchesUserPopup = ({profileOne,profileTwo,onClick,userId,partyId}:Props) => {
     const {t} = useTranslation();
-
+    useEffect(() => {
+        logEvent(analytics, 'match', {
+            party_id: partyId,
+            matched_user_id: userId,
+        });
+    }, [partyId, userId]);
     return (
         <div style={{
             height: "100vh",

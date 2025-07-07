@@ -2,13 +2,14 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {MainButton, MainButtonInactive} from "../../components/Buttons";
 import {faArrowLeft, faEnvelope, faEye, faEyeSlash, faLock} from "@fortawesome/free-solid-svg-icons";
 import {useTranslation} from "react-i18next";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import EmailTextInput from '../../components/TextInputs'
 import Text from '../../components/customText'
-import {auth} from "../../services/firebaseConfig";
+import {analytics, auth} from "../../services/firebaseConfig";
 import {createUserWithEmailAndPassword} from 'firebase/auth'
 import {toast} from "react-toastify";
+import {logEvent} from "firebase/analytics";
 
 const SignUpScreen = () => {
     const {t} = useTranslation();
@@ -22,6 +23,9 @@ const SignUpScreen = () => {
     const handleSignup = async () => {
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            logEvent(analytics, 'sign_up', {
+                method :"email"
+            });
             return userCredential;
         } catch (error: any) {
             console.error('Signup failed:', error.message);
@@ -37,6 +41,13 @@ const SignUpScreen = () => {
             return null;
         }
     };
+
+    useEffect(() => {
+        logEvent(analytics, 'screen_view', {
+            firebase_screen: 'signup_screen',
+            firebase_screen_class: 'AuthScreen',
+        });
+    }, []);
     return (
         <div style={{
             height: '100vh',
@@ -44,9 +55,7 @@ const SignUpScreen = () => {
             display: 'flex',
             alignItems: 'center',
             flexDirection: 'column',
-            gap: "1.5rem",
-            // overflow: 'scroll',
-            paddingBottom: '180px'
+            gap: "1.5rem"
         }}>
             <div style={{position: 'absolute', top: 30, left: 15}} className="forgot-password-btn"
                  onClick={() => navigate('/welcome')}>
@@ -155,7 +164,7 @@ const SignUpScreen = () => {
                           className={"forgot-password-btn"} onClick={() => navigate('/signin')}/>
                 </div>
             </div>
-            <div style={{position: "fixed", bottom: "0.5rem"}}>
+            <div style={{position: "absolute", bottom: "0.5rem"}}>
                 {
                     checkbox ?  <MainButton
                         title={t('sign_up')}

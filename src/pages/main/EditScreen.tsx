@@ -2,7 +2,7 @@ import UpperNav from "../../components/UpperNav.tsx";
 import {useTranslation} from "react-i18next";
 import BottomNav from "../../components/tabNavigation.tsx";
 import {useEffect, useRef, useState} from "react";
-import {auth, db, storage} from "../../services/firebaseConfig.tsx";
+import {analytics, auth, db, storage} from "../../services/firebaseConfig.tsx";
 import {doc, onSnapshot, updateDoc} from "firebase/firestore";
 import {faPlus, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -11,6 +11,7 @@ import Dropdown from "../../components/Dropdown.tsx";
 import {useNavigate} from "react-router-dom";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import Loader from "../../components/loader.tsx";
+import {logEvent} from "firebase/analytics";
 
 
 const EditScreen = () => {
@@ -79,6 +80,13 @@ const EditScreen = () => {
             setPreviewUrl(objectUrl);
         }
     };
+
+    useEffect(() => {
+        logEvent(analytics, 'screen_view', {
+            firebase_screen: 'edit_screen',
+            firebase_screen_class: 'MainScreens',
+        });
+    }, []);
     useEffect(() => {
         return () => {
             if (previewUrl) {
@@ -133,7 +141,7 @@ const EditScreen = () => {
         }
     };
     return (
-        <div style={{height: '100vh', width: '100vw', backgroundColor: "white", color: "black", padding: "18vh 0px 30vh", overflowY: "scroll"}}>
+        <div style={{height: '100vh', width: '100vw', backgroundColor: "white", color: "black", paddingBottom: "15vh"}}>
             <UpperNav label={t('edit_profile')}/>
             {
                 loading ? <div style={{

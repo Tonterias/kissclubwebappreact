@@ -2,15 +2,16 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faArrowLeft, faEnvelope, faEye, faEyeSlash, faLock} from '@fortawesome/free-solid-svg-icons';
 import {useTranslation} from "react-i18next";
 import EmailTextInput from "../../components/TextInputs.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {MainButton, SimpleButton} from "../../components/Buttons.tsx";
 import '../../styles/auth.css'
 import Text from "../../components/customText.tsx";
 import {useNavigate} from "react-router-dom";
-import {auth} from "../../services/firebaseConfig";
+import {analytics, auth} from "../../services/firebaseConfig";
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {toast} from "react-toastify";
 import Loader from "../../components/loader.tsx";
+import {logEvent} from "firebase/analytics";
 
 const LoginScreen = () => {
     const {t} = useTranslation();
@@ -18,11 +19,20 @@ const LoginScreen = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
+    useEffect(() => {
+        logEvent(analytics, 'screen_view', {
+            firebase_screen: 'login_screen',
+            firebase_screen_class: 'AuthScreen',
+        });
+    }, []);
     const handleLogin = async () => {
         setLoading(true);
         try {
             const user = await signInWithEmailAndPassword(auth, email, password);
             if (user) {
+                logEvent(analytics, 'user_login', {
+                    method :"email"
+                });
                 navigate('/')
                 setLoading(false);
             }
@@ -40,10 +50,8 @@ const LoginScreen = () => {
             width: '100vw',
             display: 'flex',
             alignItems: 'center',
-            paddingBottom: '50px',
             flexDirection: 'column',
-            gap: "1.5rem",
-            // overflow: 'scroll'
+            gap: "1.5rem"
         }}>
             <div style={{position: 'absolute', top: 30, left: 15}} className="forgot-password-btn"
                  onClick={() => navigate('/welcome')}>
@@ -91,7 +99,7 @@ const LoginScreen = () => {
                           className={"forgot-password-btn"} onClick={() => navigate('/signup')}/>
                 </div>
             </div>
-            <div style={{position: "fixed", bottom: "2rem"}}>
+            <div style={{position: "absolute", bottom: "2rem"}}>
                 {loading ? (
                     <Loader loading={loading} color={"red"}/>
                 ) : (

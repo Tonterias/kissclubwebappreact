@@ -342,6 +342,7 @@ const SwipeScreen = () => {
                                 removeCardRight={() => handleLike(card.id)}
                                 isTopCard={index === 0}
                                 removeCardLeft={() => handleSkip(card.id)}
+                                partyId={party}
                             />
                         </div>
                     ))}

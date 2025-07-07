@@ -4,11 +4,12 @@ import {useNavigate} from "react-router-dom";
 import Text from "../../components/customText";
 import {useTranslation} from "react-i18next";
 import {useEffect, useState} from "react";
-import {auth} from "../../services/firebaseConfig.tsx";
+import {analytics, auth} from "../../services/firebaseConfig.tsx";
 import {OutlineButton, SimpleButton} from "../../components/Buttons.tsx";
 import '../../styles/auth.css'
 import {sendEmailVerification} from "firebase/auth";
 import Loader from "../../components/loader.tsx";
+import {logEvent} from "firebase/analytics";
 
 const VerificationScreen = () => {
     const navigate = useNavigate();
@@ -38,6 +39,10 @@ const VerificationScreen = () => {
             await user.reload();
             const emailVerified = user.emailVerified;
             if (emailVerified) {
+                logEvent(analytics, 'onboarding_progress', {
+                    step_number :1,
+                    step_name:"verification_email"
+                });
                 navigate('/');
                 setLoading(false);
             } else {
@@ -52,7 +57,10 @@ const VerificationScreen = () => {
 
     useEffect(() => {
         let hasSent = false;
-
+        logEvent(analytics, 'screen_view', {
+            firebase_screen: 'verification_screen',
+            firebase_screen_class: 'AuthScreen',
+        });
         const checkUser = async () => {
             const user = auth.currentUser;
             if (user) {
