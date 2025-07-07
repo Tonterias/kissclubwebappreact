@@ -55,7 +55,8 @@ const SignUpScreen = () => {
             display: 'flex',
             alignItems: 'center',
             flexDirection: 'column',
-            gap: "1.5rem"
+            gap: "1.5rem",
+            paddingBottom: '180px'
         }}>
             <div style={{position: 'absolute', top: 30, left: 15}} className="forgot-password-btn"
                  onClick={() => navigate('/welcome')}>
@@ -164,7 +165,7 @@ const SignUpScreen = () => {
                           className={"forgot-password-btn"} onClick={() => navigate('/signin')}/>
                 </div>
             </div>
-            <div style={{position: "absolute", bottom: "0.5rem"}}>
+            <div style={{position: "fixed", bottom: "0.5rem"}}>
                 {
                     checkbox ?  <MainButton
                         title={t('sign_up')}

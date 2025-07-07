@@ -51,7 +51,8 @@ const LoginScreen = () => {
             display: 'flex',
             alignItems: 'center',
             flexDirection: 'column',
-            gap: "1.5rem"
+            gap: "1.5rem",
+            paddingBottom: '50px'
         }}>
             <div style={{position: 'absolute', top: 30, left: 15}} className="forgot-password-btn"
                  onClick={() => navigate('/welcome')}>
@@ -99,7 +100,7 @@ const LoginScreen = () => {
                           className={"forgot-password-btn"} onClick={() => navigate('/signup')}/>
                 </div>
             </div>
-            <div style={{position: "absolute", bottom: "2rem"}}>
+            <div style={{position: "fixed", bottom: "2rem"}}>
                 {loading ? (
                     <Loader loading={loading} color={"red"}/>
                 ) : (
