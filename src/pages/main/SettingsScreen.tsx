@@ -3,9 +3,10 @@ import {faArrowLeft, faArrowRight} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {MainButton} from "../../components/Buttons.tsx";
-import {auth} from "../../services/firebaseConfig.tsx";
+import {analytics, auth} from "../../services/firebaseConfig.tsx";
 import {signOut} from "firebase/auth"
 import {useEffect, useState} from "react";
+import {logEvent} from "firebase/analytics";
 const SettingsScreen = () => {
     const navigate = useNavigate();
     const {t} = useTranslation();
@@ -14,7 +15,7 @@ const SettingsScreen = () => {
     const logout =async ()=>{
         try {
             await signOut(auth);
-            navigate('/user/login');
+            navigate('/login');
         }catch(e) {
             console.error(e);
         }
@@ -26,6 +27,13 @@ const SettingsScreen = () => {
             setEmail(user.email);
             }else setEmail('')
     },[])
+
+    useEffect(() => {
+        logEvent(analytics, 'screen_view', {
+            firebase_screen: 'settingsScreen',
+            firebase_screen_class: 'MainScreens',
+        });
+    }, []);
     return (
         <div style={{
             height: '100vh',
@@ -60,6 +68,12 @@ const SettingsScreen = () => {
             <div style={{width:"100vw",display:"flex",marginTop:"2rem",justifyContent:"center"}}>
                 <MainButton title={t('log_out')} color={"white"} onClick={logout}/>
             </div>
+
+
+            <p style={{position: "absolute", bottom: 100, color: "grey"}}>
+                v1.1.2b20
+            </p>
+
         </div>
     )
 }

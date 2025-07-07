@@ -1,8 +1,9 @@
 import {useTranslation} from "react-i18next";
 import Cross from '../assets/images/cross.png';
 import Silent from '../assets/images/silent.png';
-import {auth, db} from "../services/firebaseConfig.tsx";
+import {analytics, auth, db} from "../services/firebaseConfig.tsx";
 import {arrayUnion, doc, getDoc, updateDoc, arrayRemove} from "firebase/firestore";
+import {logEvent} from "firebase/analytics";
 
 type Props = {
     onClick: () => void,
@@ -45,6 +46,11 @@ const BlockDialogue = ({onClick, userId, navigate}: Props) => {
                 newMatchList: arrayRemove(user.uid),
                 viewedUser: arrayRemove(user.uid),
             })
+
+            logEvent(analytics, 'blocked_user', {
+                party_id: data.partyId,
+                reported_user_id: userId,
+            });
         }
     }
 

@@ -3,6 +3,8 @@
     import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
     import {faHeart, faXmark} from "@fortawesome/free-solid-svg-icons";
     import {useNavigate} from "react-router-dom";
+    import {logEvent} from "firebase/analytics";
+    import {analytics} from "../services/firebaseConfig.tsx";
 
     type CustomCardSwipeProps = {
         data: { name: string; image: string, id: string };
@@ -20,6 +22,7 @@
                                  removeCardLeft,
                                  removeCardRight,
                                  isTopCard,
+                                    partyId
 
                              }: CustomCardSwipeProps) => {
         const cardRef = useRef<HTMLDivElement>(null);
@@ -118,10 +121,18 @@
             }
         };
         const onSwipeRightButton = () => {
+            logEvent(analytics, 'swipe_like', {
+                party_id: partyId,
+                target_user_id:data.id
+            });
             removeCardRight();
         }
 
         const onSwipeLeftButton = () => {
+            logEvent(analytics, 'swipe_not', {
+                party_id: partyId,
+                target_user_id:data.id
+            });
             removeCardLeft();
         }
         return (

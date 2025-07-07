@@ -6,6 +6,9 @@ import '../../styles/auth.css'
 import {MainButton, SimpleButton} from "../../components/Buttons.tsx";
 import {useNavigate} from "react-router-dom";
 import LanguageChanger from "../../components/languageChanger.tsx";
+import {useEffect} from "react";
+import {logEvent} from "firebase/analytics";
+import {analytics} from "../../services/firebaseConfig.tsx";
 
 const WelcomeScreen = () => {
     const {t} = useTranslation();
@@ -24,6 +27,12 @@ const WelcomeScreen = () => {
                 navigate("/phone]");
         }
     }
+    useEffect(() => {
+        logEvent(analytics, 'screen_view', {
+            firebase_screen: 'welcome_screen',
+            firebase_screen_class: 'AuthScreen',
+        });
+    }, []);
     return (
         <div style={{
             display: 'flex',
@@ -102,7 +111,6 @@ const WelcomeScreen = () => {
             </div>
 
 
-            <p style={{color:"grey"}}>v1.1.1b20</p>
         </div>
     )
 }

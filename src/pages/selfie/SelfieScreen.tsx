@@ -3,11 +3,13 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MainButton } from "../../components/Buttons.tsx";
 import React, {useState, useRef, useEffect} from "react";
-import { storage } from "../../services/firebaseConfig.tsx";
+import {analytics, db, storage} from "../../services/firebaseConfig.tsx";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {useNavigate, useParams } from "react-router-dom";
 import {uploadData} from "../../components/UploadData.tsx";
 import Loader from "../../components/loader.tsx";
+import {logEvent} from "firebase/analytics";
+import {doc, getDoc} from "firebase/firestore";
 
 
 const SelfieScreen = () => {
@@ -60,6 +62,16 @@ const SelfieScreen = () => {
             const url = await uploadFile(selectedFile);
             if (!url || !id) return;
             await uploadData(url,id);
+            const docRef = doc(db, "parties", id);
+            const partiesDoc = await getDoc(docRef);
+            const data = partiesDoc.data();
+
+            if (data) {
+                logEvent(analytics, 'party_joined', {
+                    party_id: id,
+                    party_name: data.localName || "unknown_party",
+                });
+            }
             setLoading(false);
             navigate('/');
 
@@ -68,7 +80,12 @@ const SelfieScreen = () => {
             setLoading(false);
         }
     };
-
+    useEffect(() => {
+        logEvent(analytics, 'screen_view', {
+            firebase_screen: 'selfie_screen',
+            firebase_screen_class: 'PartyScreens',
+        });
+    }, []);
 
     return (
         <div
